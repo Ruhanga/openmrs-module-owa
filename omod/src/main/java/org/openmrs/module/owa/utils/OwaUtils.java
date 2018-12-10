@@ -94,20 +94,23 @@ public class OwaUtils {
 			
 			if (null != appRequirements.getRequiredModules()) {
 				for (AppRequiredModule requiredModule : appRequirements.getRequiredModules()) {
-					
+					boolean moduleStarted = false;
+					String reqVersion = requiredModule.getVersion();
 					for (Module module : ModuleFactory.getStartedModules()) {
 						if (module.getPackageName().equals(requiredModule.getName())) {
-							String reqVersion = requiredModule.getVersion();
 							
-							if (!(reqVersion == null || ModuleUtil.matchRequiredVersions(module.getVersion(), reqVersion))) {
-								errorMessage
-								        .append(", ")
-								        .append(
-								            module.getPackageName().replace("org.openmrs.module.", "")
-								                    .replace("org.openmrs.", "")).append(" version: ").append(reqVersion);
+							if (reqVersion != null && ModuleUtil.matchRequiredVersions(module.getVersion(), reqVersion)) {
+								moduleStarted = true;
 							}
 							break;
 						}
+					}
+					if (!moduleStarted) {
+						errorMessage
+						        .append(", ")
+						        .append(
+						            requiredModule.getName().replace("org.openmrs.module.", "").replace("org.openmrs.", ""))
+						        .append(" version: ").append(reqVersion);
 					}
 				}
 			}

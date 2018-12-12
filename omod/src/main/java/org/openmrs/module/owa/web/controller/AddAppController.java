@@ -88,7 +88,7 @@ public class AddAppController {
                                         session.setAttribute(WebConstants.OPENMRS_ERROR_ATTR, message);
                                     } 
                                     else {                                    	
-                                    	message = OwaUtils.extractMissingRequirementsMessage(uploadedFile);
+                                    	message = appManager.extractMissingRequirementsMessage(uploadedFile, appManager.getStartedModules());
                                     	if (!("".equals(message))) {
                                     		
                                     		//display error message for owa apps that need requirements first installed
